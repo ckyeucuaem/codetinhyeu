@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>HÃY LÀM NY ANH NHÉ</title>
+</head>
+<body>
+    <div class="container">
+        
+        <div id="gifContainer">
+            <img id="gifContainerImg" src="mocha.gif" alt="Ositos Iniciales" ">
+        </div>
+        <div id="happyGifContainer" style="display: none;">
+            <img src="mocha5final.gif" alt="Ositos Felices" style="width: 100%; height: 100%;">
+        </div>
+        <div id="happyGifContainer2" style="display: none;">
+            <img src="mocha6final.gif" alt="Ositos Felices" style="width: 100%; height: 100%;">
+        </div>
+        <div id="happyGifContainer3" style="display: none;">
+            <img src="mocha7final.gif" alt="Ositos Felices" style="width: 100%; height: 100%;">
+        </div>
+        <div id="happyGifContainer4" style="display: none;">
+            <img src="mocha9final.gif" alt="Ositos Felices" style="width: 100%; height: 100%;">
+        </div>
+        <div id="sadGifContainer" style="display: none;">
+            <img src="mocha2.gif" alt="Osito Triste" style="width: 80%; height: 80%;">
+        </div>
+        <div id="sadGifContainer1" style="display: none;">
+            <img src="mocha3.gif" alt="Osito Triste" style="width: 80%; height: 80%;">
+        </div>
+        <div id="sadGifContainer2" style="display: none;">
+            <img src="mocha4.gif" alt="Osito Triste" style="width: 80%; height: 80%;">
+        </div>
+        
+        <h1 id="question">Em đồng ý làm người yêu anh nhé!</h1>
+        <div id="messageContainer" style="display: none;"></div>
+
+        <button id="siBtn">Em đồng ý</button>
+        <button id="noBtn">Không</button>
+        
+    </div>
+
+    <script src="script.js"></script>
+    <div id="final-choice" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:999; justify-content:center; align-items:center;">
+        <div style="background:white; padding:30px; border-radius:20px; text-align:center;">
+            <h3 style="color: #d81b60;">Em có muốn xem thử thế giới trong tim anh không? ❤️</h3>
+            <button onclick="chuyenSangThienHa()" style="margin-top:20px; padding:10px 20px; border:none; background:#ff4081; color:white; border-radius:10px; cursor:pointer; font-weight:bold;">Khám phá ngay ✨</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('siBtn').addEventListener('click', function() {
+            setTimeout(function() {
+                document.getElementById('final-choice').style.display = 'flex';
+            }, 4000); 
+        });
+
+        function chuyenSangThienHa() {
+            window.parent.postMessage("chuyen_sang_thienha", "*");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dành riêng cho em ❤️</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fce4ec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* SCREEN 1: LOADING */
+        #loading-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            z-index: 10;
+            background-color: #fce4ec;
+            transition: opacity 0.5s ease;
+        }
+        .heart-loading {
+            font-size: 40px;
+            color: #ff4081;
+            animation: pulse 0.6s infinite alternate;
+            margin-bottom: 20px;
+        }
+        .progress-container {
+            width: 300px;
+            background-color: #f8bbd0;
+            border-radius: 20px;
+            padding: 5px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+            text-align: center;
+            position: relative;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 25px;
+            background-color: #ff4081;
+            border-radius: 15px;
+            transition: width 0.1s linear;
+        }
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            top: 7px;
+            left: 0;
+            font-weight: bold;
+            color: #fff;
+            font-size: 14px;
+        }
+        .status-text {
+            margin-top: 15px;
+            color: #c2185b;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 14px;
+        }
+        .btn-click-me {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
+            animation: bounce 1s infinite;
+        }
+
+        /* SCREEN 2: MAIN PROJECT */
+        #main-screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .project-card {
+            background-color: #d81b60;
+            border-radius: 25px;
+            width: 380px;
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            z-index: 5;
+        }
+        .project-card h2 {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .input-container {
+            background: white;
+            border-radius: 25px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .input-container input {
+            border: none;
+            outline: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            width: 70%;
+            text-align: center;
+            color: #c2185b;
+        }
+        .heart-icon-input {
+            color: #ff4081;
+            font-size: 24px;
+            margin-right: 15px;
+            animation: pulse 0.8s infinite alternate;
+        }
+        .btn-submit {
+            background-color: white;
+            color: #d81b60;
+            border: 2px solid #d81b60;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #f8bbd0;
+        }
+
+        /* BACKGROUND DECORATIONS */
+        .decorations {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 150px;
+            pointer-events: none;
+        }
+        .pink-car {
+            position: absolute;
+            bottom: 20px;
+            font-size: 60px;
+            z-index: 2;
+            animation: carDrive 12s linear infinite;
+        }
+        .floating-heart {
+            position: absolute;
+            color: #ff80ab;
+            font-size: 14px;
+            animation: floatUp 3s linear infinite;
+            bottom: 80px;
+        }
+
+        /* SCREEN 3: POPUP LETTER */
+        #letter-popup {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 20;
+            justify-content: center;
+            align-items: center;
+        }
+        .letter-card {
+            background: white;
+            border-radius: 20px;
+            width: 400px;
+            max-width: 90%;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+        }
+        .letter-card.open {
+            transform: scale(1);
+        }
+        .letter-header {
+            font-size: 22px;
+            font-weight: bold;
+            color: #d81b60;
+            margin-bottom: 15px;
+        }
+        .balloon-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        .letter-text {
+            color: #4f5b66;
+            line-height: 1.6;
+            font-size: 15px;
+            text-align: justify;
+            min-height: 120px;
+            word-wrap: break-word;
+            white-space: pre-line;
+        }
+        
+        /* CÂU HỎI VÀ NÚT */
+        .question-text {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #d81b60;
+            font-size: 16px;
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .letter-buttons {
+            margin-top: 20px;
+            display: none;
+            justify-content: space-around;
+            align-items: center;
+            height: 50px;
+        }
+        .btn-letter {
+            padding: 8px 25px;
+            font-size: 15px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        #yesLetterBtn {
+            background-color: #4caf50;
+            color: white;
+        }
+        #noLetterBtn {
+            background-color: #f44336;
+            color: white;
+            position: relative;
+        }
+
+        /* ANIMATIONS */
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        @keyframes carDrive {
+            0% { left: -100px; }
+            100% { left: calc(100% + 100px); }
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(0.8); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-400px) translateX(var(--md-drift, 20px)) scale(1.3); opacity: 0; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SCREEN 1: LOADING -->
+    <div id="loading-screen">
+        <div class="heart-loading">❤️</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress"></div>
+            <div class="progress-text" id="progress-val">0%</div>
+        </div>
+        <div class="status-text" id="status-lbl">LOADING LOVE . . .</div>
+        <button class="btn-click-me" id="clickBtn" onclick="goToMainScreen()">Click me!</button>
+    </div>
+
+    <!-- SCREEN 2: MAIN PROJECT -->
+    <div id="main-screen">
+        <div class="project-card">
+            <h2>Welcome to my project</h2>
+            <div class="input-container">
+                <input type="text" id="loverName" placeholder="Nhập tên..." autocomplete="off">
+                <div class="heart-icon-input">❤️</div>
+            </div>
+            <button class="btn-submit" onclick="openLetter()">Nhận thư</button>
+        </div>
+
+        <div class="decorations">
+            <div class="pink-car" id="car">🚌</div>
+            <div id="hearts-layer"></div>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: POPUP LETTER -->
+    <div id="letter-popup">
+        <div class="letter-card" id="lCard">
+            <div class="balloon-icon" id="letter-emoji">🎈</div>
+            <div class="letter-header" id="letter-title">Gửi em!</div>
+            <div class="letter-text" id="typed-text"></div>
+            <div class="question-text" id="ask-text">Em có muốn biết quá trình anh rung động với em như thế nào không?</div>
+            <div class="letter-buttons" id="letter-btns">
+                <button class="btn-letter" id="yesLetterBtn" onclick="showStory()">Có chứ ❤️</button>
+                <button class="btn-letter" id="noLetterBtn" onmouseover="moveNoButton()">Không thèm 😜</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('click', function initMusic() {
+    // Gửi lệnh phát nhạc phần 1 (cho trang 1 và 2)
+    window.parent.postMessage("play_part1", "*");
+    
+    // Xóa sự kiện sau khi đã click 1 lần để không bị lặp lại
+    document.removeEventListener('click', initMusic);
+}, { once: true });
+        // 1. Xử lý thanh Loading
+        let progress = document.getElementById('progress');
+        let progressVal = document.getElementById('progress-val');
+        let statusLbl = document.getElementById('status-lbl');
+        let clickBtn = document.getElementById('clickBtn');
+        let count = 0;
+
+        let interval = setInterval(() => {
+            count += Math.floor(Math.random() * 5) + 2; 
+            if(count > 100) count = 100;
+            
+            progress.style.width = count + '%';
+            progressVal.innerText = count + '%';
+
+            if(count === 100) {
+                clearInterval(interval);
+                statusLbl.innerText = "OK RỒI ĐÓ :D";
+                clickBtn.style.display = 'block';
+            }
+        }, 100);
+
+        function goToMainScreen() {
+            window.parent.postMessage("play_music1", "*");
+            let loadScreen = document.getElementById('loading-screen');
+            let mainScreen = document.getElementById('main-screen');
+            
+            loadScreen.style.opacity = 0;
+            setTimeout(() => {
+                loadScreen.style.display = 'none';
+                mainScreen.style.display = 'flex';
+                setTimeout(() => { mainScreen.style.opacity = 1; }, 50);
+            }, 500);
+
+            setInterval(createFloatingHeart, 250);
+        }
+
+        // 2. Hiệu ứng bong bóng trái tim bay
+        function createFloatingHeart() {
+            const layer = document.getElementById('hearts-layer');
+            const car = document.getElementById('car');
+            if(!layer || !car) return;
+            
+            const carRect = car.getBoundingClientRect();
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerText = '❤️';
+            
+            heart.style.left = (carRect.left + carRect.width / 2 + (Math.random() * 20 - 10)) + 'px';
+            heart.style.bottom = (window.innerHeight - carRect.top - 20) + 'px';
+            
+            heart.style.setProperty('--md-drift', (Math.random() * 80 - 40) + 'px');
+            heart.style.animationDuration = (Math.random() * 1.5 + 2) + 's'; 
+
+            layer.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 3500);
+        }
+
+        // 3. Xử lý kiểm tra tên và hiển thị bức thư
+        let nameInput = "";
+        function openLetter() {
+            nameInput = document.getElementById('loverName').value.trim();
+            
+            // --- THAY ĐỔI TÊN ĐÚNG CỦA NGƯỜI YÊU Ở ĐÂY ---
+            const nameCorrect = "Trần Thị Thu Hiền"; 
+
+            if(nameInput === "") {
+                alert("Em hãy nhập tên vào đã nhé! 🥰");
+                return;
+            }
+
+            // Kiểm tra xem có trùng tên không (không phân biệt hoa thường)
+            if(nameInput.toLowerCase() !== nameCorrect.toLowerCase()) {
+                alert("Ơ kìa, thư này không phải dành cho bạn rồi! Nhập lại đúng tên đi nè 😜");
+                return;
+            }
+
+            const textContent = `Em biết không anh thật thật sự rất thích em nhiều nhiều lắm luôn ó. Một ngày có 24h thì chắc 23h58 phút anh nghĩ về em rùi. Nên anh viết thư này bày tỏ tình cảm cho ${nameInput} của anh!`;
+
+            document.getElementById('letter-popup').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('lCard').classList.add('open');
+                typeWriter(textContent, 0, () => {
+                    document.getElementById('ask-text').style.display = 'block';
+                    document.getElementById('letter-btns').style.display = 'flex';
+                });
+            }, 100);
+        }
+
+        // Đây là hàm mới (đã có thêm 'callback')
+function typeWriter(text, i, callback) {
+    if (i < text.length) {
+        document.getElementById("typed-text").innerHTML += text.charAt(i);
+        setTimeout(() => {
+            typeWriter(text, i + 1, callback);
+        }, 45); 
+    } else if (callback) {
+        callback(); // Lệnh này giúp báo cho máy tính biết là đã chạy xong chữ
+    }
+}
+
+        // 4. Hiệu ứng né nút "Không thèm"
+        function moveNoButton() {
+            const noBtn = document.getElementById('noLetterBtn');
+            const card = document.getElementById('lCard');
+            const cardRect = card.getBoundingClientRect();
+
+            const x = Math.random() * (cardRect.width - noBtn.offsetWidth - 40) - (cardRect.width/2 - noBtn.offsetWidth);
+            const y = Math.random() * 100 - 50; 
+            
+            noBtn.style.position = 'relative';
+            noBtn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        // 5. Nhật ký rung động
+        function showStory() {
+            document.getElementById('noLetterBtn').style.transform = 'none';
+            document.getElementById('letter-emoji').innerText = '✨💞';
+            document.getElementById('letter-title').innerText = 'Hành trình rung động...';
+            document.getElementById('ask-text').style.display = 'none';
+            document.getElementById('letter-btns').style.display = 'none';
+            
+            document.getElementById("typed-text").innerHTML = "";
+            
+            const storyText = `Thật ra thì từ lúc thấy em là anh đã có cảm giác rung động rùi nhưng mò lúc đó vk iu có bồ mất nên anh không dám. Sau đó anh hay vô ins của bé á sau đó biết bé chia tay bồ anh nghĩ bé buồn nên ib nhắn tin cho bé vui. Thật ra lúc đầu anh nghĩ tâm sự chia buồn với bé chút thôi ai ngờ càng ngày anh càng thích bé mất không biết sao nữa. Có phải anh tham lam lắm đk? Cũng ngu ngốc lắm đk? Em có thể cho một người vừa ngu ngốc lại tham lam như anh đc ở bên cạnh yêu thương em đc không. Anh hứa sẽ đối xử thật tốt với bé, nghe lời bé, yêu thương bé và không làm bé buồn. 🥰`;
+            
+           typeWriter(storyText, 0, () => {
+                const btn = document.createElement("button");
+                btn.innerText = "Chốt hạ thôi ❤️";
+                // Thêm một chút style cho nút đẹp hơn
+                btn.style.display = "block";
+                btn.style.margin = "10px auto";
+                btn.style.padding = "10px 20px";
+                btn.style.cursor = "pointer";
+                
+                btn.onclick = () => {
+                    window.parent.postMessage("chuyen_sang_tronny", "*");
+                };
+                document.getElementById("typed-text").appendChild(btn);
+            });
+        } // Đóng ngoặc của hàm showStory
+    </script>
+</body>
+</html>
