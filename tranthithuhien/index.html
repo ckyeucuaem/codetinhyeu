@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Gửi người yêu dấu ❤️</title>
+    <style>
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
+        iframe { 
+            width: 100%; height: 100%; border: none; 
+            position: absolute; top: 0; left: 0; 
+            transition: opacity 1s ease-in-out;
+        }
+        /* Mặc định chỉ hiện file tỏ tình, ẩn các file sau */
+        #totinhFrame { z-index: 3; }
+        #tronnyFrame { opacity: 0; z-index: 2; pointer-events: none; }
+        #thienhaFrame { opacity: 0; z-index: 1; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <iframe src="1/totinh.html" id="totinhFrame"></iframe>
+    
+    <iframe src="2/tronny.html" id="tronnyFrame"></iframe>
+    
+    <iframe src="3/thienha.html" id="thienhaFrame"></iframe>
+<audio id="music-part1" loop>
+        <source src="music/nhac1.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="music-part3" loop>
+        <source src="music/nhac2.mp3" type="audio/mpeg">
+    </audio>
+    <script>
+const m1 = document.getElementById("music-part1");
+const m3 = document.getElementById("music-part3");
+
+// Click đầu tiên ở bất kỳ đâu sẽ phát nhạc 1
+window.addEventListener("message", function(event) {
+
+    // Phát nhạc 1
+    if (event.data === "play_music1") {
+        m1.play().catch(err => console.log(err));
+    }
+
+    // Chuyển sang trang 2
+    if (event.data === "chuyen_sang_tronny") {
+
+        document.getElementById("totinhFrame").style.opacity = "0";
+        document.getElementById("totinhFrame").style.pointerEvents = "none";
+
+        document.getElementById("tronnyFrame").style.opacity = "1";
+        document.getElementById("tronnyFrame").style.pointerEvents = "auto";
+
+        // Nếu đang phát thì không ảnh hưởng
+        if (m1.paused) {
+            m1.play().catch(() => {});
+        }
+    }
+
+    // Chuyển sang trang 3
+    if (event.data === "chuyen_sang_thienha") {
+
+        document.getElementById("tronnyFrame").style.opacity = "0";
+        document.getElementById("tronnyFrame").style.pointerEvents = "none";
+
+        document.getElementById("thienhaFrame").style.opacity = "1";
+        document.getElementById("thienhaFrame").style.pointerEvents = "auto";
+
+        m1.pause();
+        m1.currentTime = 0;
+
+        m3.play().catch(() => {});
+    }
+
+});
+</script>
+</body>
+</html>
